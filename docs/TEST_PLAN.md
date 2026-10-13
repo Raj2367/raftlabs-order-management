@@ -44,8 +44,10 @@
 - **`components/MenuList.test.tsx`** — renders the correct number of items
   (matches `menuItems.length`), every item name is present, and every item
   formatted price (`$${price.toFixed(2)}`) is present. (3 tests, passing)
-- Cart: add, increase, decrease, remove items; cart total reflects quantity
-  changes. — to be added in a later stage.
+- **`components/MenuCart.test.tsx`** — adding an item to the cart (total items
+  increments), increasing quantity (total items increments), decrementing to
+  zero (item removed from cart), and two-item subtotal equals sum of line
+  totals. (4 tests, passing)
 - Checkout form: client-side validation of name, address, and phone; prevents
   submission when invalid. — to be added in a later stage.
 - Order tracking view: displays current status and polls for updates while
@@ -70,4 +72,4 @@
 
 ## Current Results
 
-- **22 passed, 0 failed, 0 skipped** across 6 test files.
+- **26 passed, 0 failed, 0 skipped** across 7 test files.
