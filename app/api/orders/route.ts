@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { Order, type OrderDoc, type OrderItem } from '@/lib/models/Order';
 import { connect } from '@/lib/mongodb';
 import { menuItems } from '@/lib/menu';
+import { toOrderResponse } from '@/lib/serializers';
 
 function countDigits(str: string): number {
   return (str.match(/\d/g) || []).length;
@@ -132,21 +133,5 @@ export async function POST(request: Request) {
     _id: { toString: () => string };
   };
 
-  return NextResponse.json(
-    {
-      id: doc._id.toString(),
-      customer: doc.customer,
-      items: doc.items.map((item) => ({
-        menuItemId: item.menuItemId,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-      })),
-      subtotal: doc.subtotal,
-      status: doc.status,
-      createdAt: doc.createdAt.toISOString(),
-      updatedAt: doc.updatedAt.toISOString(),
-    },
-    { status: 201 }
-  );
+  return NextResponse.json(toOrderResponse(doc), { status: 201 });
 }

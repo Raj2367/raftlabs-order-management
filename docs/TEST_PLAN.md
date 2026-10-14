@@ -14,9 +14,11 @@
   timestamps, rejects empty items array, missing customer fields, negative
   subtotal, non-integer quantity, zero quantity, and invalid status enum
   value. (8 tests, passing)
-- Order-status transition rules (to be added in a later stage): validates that
-  transitions advance exactly one step forward and reject backward, skipped,
-  and unknown transitions.
+- **`lib/orderStatus.test.ts`** — `rank` returns 0..3 in declared order; `nextStatus`
+  advances one step forward and returns null at `delivered`; `deriveStatus` returns
+  each status at the exact boundary times (0ms, 15_000ms, 45_000ms, 90_000ms);
+  `effectiveStatus` returns the higher rank, returns stored on tie, and returns stored
+  when derived is behind. (10 tests)
 - Menu helper utilities (to be added): type validation, price calculations.
 
 ## Integration
@@ -39,8 +41,16 @@
   rejects client-supplied price/name/subtotal/status, computes subtotal server-side,
   returns 201 with normalized order or 400 with error message on failure;
   malformed JSON returns 400 with `{"error":"Invalid JSON"}`. (8 tests, passing)
-- Status update API (`PATCH /api/orders/:id/status`) verifying forward-only
-  enforcement. — to be added in a later stage.
+- **`app/api/orders/[id]/route.test.ts`** — `GET /api/orders/[id]` returns 200 with the
+  serialized order shape; 400 for a malformed id; 404 for a valid but missing id; and
+  returns derived `out_for_delivery` status when `createdAt` is 60s in the past while
+  the stored status remains `received`. (4 tests)
+- **`app/api/orders/[id]/status/route.test.ts`** — `PATCH /api/orders/[id]/status`
+  returns 200 and advances `received` → `preparing`; 400 on skipped transition
+  (`received` → `out_for_delivery`); 400 on backward transition (`preparing` → `received`);
+  400 on no-op (`delivered` → `delivered`); 400 on invalid status value; 400 when body is
+  JSON `null` or an array; 404 for a missing valid id; and persists the status change
+  after a successful PATCH. (9 tests)
 
 ## UI (Component)
 
@@ -78,4 +88,4 @@
 
 ## Current Results
 
-- **39 passed, 0 failed, 0 skipped** across 9 test files.
+- **65 passed, 0 failed, 0 skipped** across 12 test files.
