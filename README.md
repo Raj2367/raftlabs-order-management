@@ -155,6 +155,8 @@ effectiveStatus = max_by_rank(storedStatus, derivedStatus)
 
 Stored status is advanced explicitly and manually via `PATCH /api/orders/:id/status` (forward-only). No background worker or scheduled job updates statuses automatically.
 
+The API and UI show the **effective status** (`max_by_rank(stored, time-derived)`), while MongoDB stores the **stored status**, which changes only through `PATCH /api/orders/:id/status`. Atlas will often show a lower status than the tracking UI; this is intentional.
+
 The **order tracking view** (`OrderTracking` component) polls `GET /api/orders/:id` at a configurable interval (default 5,000 ms) using `setTimeout` — it does not use `setInterval`, and it stops polling once the effective status reaches `delivered`. This is **client-side polling, not server-pushed real-time updates**.
 
 ## Limitations and Deployment
