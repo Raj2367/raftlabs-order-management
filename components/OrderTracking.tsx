@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import type { OrderStatus } from '@/lib/orderStatusShared';
-import { ORDER_STATUSES, rank } from '@/lib/orderStatus';
+import { rank } from '@/lib/orderStatus';
+import { ORDER_STATUSES, type OrderStatus } from '@/lib/orderStatusShared';
 
 interface OrderTrackingProps {
   orderId: string;
