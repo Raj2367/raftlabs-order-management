@@ -66,8 +66,14 @@
   method, headers, and exact JSON body; API 400 shows error and preserves cart;
   API 201 calls `onSuccess` with the returned order (ID and subtotal); network
   rejection shows `Unable to place order`. (5 tests, passing)
+- **`components/OrderTracking.test.tsx`** — `vi.spyOn(global, 'fetch')` with
+  `vi.useFakeTimers()` (pollIntervalMs=100); `afterEach` restores timers and mocks.
+  Cases: fetches once after mount + interval; status advances across polls
+  (`received` → `preparing` → `out_for_delivery`); polling stops after `delivered`;
+  unmount clears pending timeout (no fetch after unmount); single failed poll retains
+  last status with no error; three consecutive failures render a `role="alert"`. (6 tests)
 - Order tracking view: displays current status and polls for updates while
-  active. — to be added in a later stage.
+  active. (added in Step 6B)
 
 ## End-to-End
 
@@ -88,4 +94,4 @@
 
 ## Current Results
 
-- **65 passed, 0 failed, 0 skipped** across 12 test files.
+- **71 passed, 0 failed, 0 skipped** across 13 test files.

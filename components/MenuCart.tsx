@@ -6,6 +6,8 @@ import MenuList from '@/components/MenuList';
 import CartPanel, { type CartEntry } from '@/components/CartPanel';
 import CheckoutForm, { type OrderResponse } from '@/components/CheckoutForm';
 import OrderConfirmation from '@/components/OrderConfirmation';
+import OrderTracking from '@/components/OrderTracking';
+import { type OrderStatus } from '@/lib/models/Order';
 
 interface MenuCartProps {
   items: MenuItem[];
@@ -14,6 +16,7 @@ interface MenuCartProps {
 export default function MenuCart({ items }: MenuCartProps) {
   const [cart, setCart] = useState<Record<string, CartEntry>>({});
   const [confirmation, setConfirmation] = useState<OrderResponse | null>(null);
+  const [trackingOrderId, setTrackingOrderId] = useState<string | null>(null);
 
   const addToCart = (id: string) => {
     const item = items.find((i) => i.id === id);
@@ -76,13 +79,31 @@ export default function MenuCart({ items }: MenuCartProps) {
     setCart({});
   };
 
+  const handleTrack = () => {
+    if (confirmation) {
+      setTrackingOrderId(confirmation.id);
+    }
+  };
+
   const entries = Object.values(cart);
 
-  if (confirmation) {
+  if (confirmation && !trackingOrderId) {
     return (
       <div>
         <MenuList items={items} onAddToCart={addToCart} />
-        <OrderConfirmation order={confirmation} />
+        <OrderConfirmation order={confirmation} onTrack={handleTrack} />
+      </div>
+    );
+  }
+
+  if (confirmation && trackingOrderId) {
+    return (
+      <div>
+        <MenuList items={items} onAddToCart={addToCart} />
+        <OrderTracking
+          orderId={trackingOrderId}
+          initialStatus={confirmation.status as OrderStatus}
+        />
       </div>
     );
   }
