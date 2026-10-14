@@ -1,8 +1,5 @@
-import {
-  type OrderDoc,
-  type OrderItem,
-  type OrderStatus,
-} from '@/lib/models/Order';
+import type { OrderDoc, OrderItem } from '@/lib/models/Order';
+import type { OrderStatus } from '@/lib/orderStatusShared';
 import { effectiveStatus, deriveStatus } from '@/lib/orderStatus';
 
 export interface OrderResponse {

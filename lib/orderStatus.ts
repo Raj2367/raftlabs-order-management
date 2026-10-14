@@ -1,4 +1,4 @@
-import { ORDER_STATUSES, type OrderStatus } from '@/lib/models/Order';
+import { ORDER_STATUSES, type OrderStatus } from '@/lib/orderStatusShared';
 
 export { ORDER_STATUSES, type OrderStatus };
 

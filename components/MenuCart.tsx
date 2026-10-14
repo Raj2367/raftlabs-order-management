@@ -7,7 +7,7 @@ import CartPanel, { type CartEntry } from '@/components/CartPanel';
 import CheckoutForm, { type OrderResponse } from '@/components/CheckoutForm';
 import OrderConfirmation from '@/components/OrderConfirmation';
 import OrderTracking from '@/components/OrderTracking';
-import { type OrderStatus } from '@/lib/models/Order';
+import type { OrderStatus } from '@/lib/orderStatusShared';
 
 interface MenuCartProps {
   items: MenuItem[];
