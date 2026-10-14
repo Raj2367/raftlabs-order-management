@@ -2,6 +2,12 @@
 
 A food-delivery order management application built with Next.js 14, TypeScript, and Tailwind CSS.
 
+## Live Demo
+
+Live application: **[https://raftlabs-order-management-six.vercel.app/](https://raftlabs-order-management-six.vercel.app/)**
+
+Hosted on Vercel with MongoDB Atlas as the database.
+
 Customers browse a static menu, build a shopping cart, check out with customer details, place orders, and track order status through a forward-only delivery lifecycle.
 
 ## Features
@@ -166,7 +172,7 @@ The **order tracking view** (`OrderTracking` component) polls `GET /api/orders/:
 - **No authentication** — all endpoints are publicly accessible.
 - **No payment processing** — subtotal is computed for display only; no real payments are integrated.
 - **No server-pushed updates** — status changes are observed via client-side polling, not WebSocket or SSE.
-- **No deployment** — the assessment calls for a hosted application (e.g., Vercel), but deployment is not yet configured or completed. There is no live URL to access.
+- **Hosted demo network allowlist** — the live demo uses a demo-only Atlas network allowlist (`0.0.0.0/0`). Production deployments should restrict this to known egress IPs or use Vercel's static outbound IPs on eligible plans.
 
 ## Development Scripts
 
