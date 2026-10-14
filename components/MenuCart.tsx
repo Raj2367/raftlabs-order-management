@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { type MenuItem } from '@/lib/menu';
 import MenuList from '@/components/MenuList';
 import CartPanel, { type CartEntry } from '@/components/CartPanel';
+import CheckoutForm, { type OrderResponse } from '@/components/CheckoutForm';
+import OrderConfirmation from '@/components/OrderConfirmation';
 
 interface MenuCartProps {
   items: MenuItem[];
@@ -11,6 +13,7 @@ interface MenuCartProps {
 
 export default function MenuCart({ items }: MenuCartProps) {
   const [cart, setCart] = useState<Record<string, CartEntry>>({});
+  const [confirmation, setConfirmation] = useState<OrderResponse | null>(null);
 
   const addToCart = (id: string) => {
     const item = items.find((i) => i.id === id);
@@ -68,7 +71,21 @@ export default function MenuCart({ items }: MenuCartProps) {
     });
   };
 
+  const handleSuccess = (order: OrderResponse) => {
+    setConfirmation(order);
+    setCart({});
+  };
+
   const entries = Object.values(cart);
+
+  if (confirmation) {
+    return (
+      <div>
+        <MenuList items={items} onAddToCart={addToCart} />
+        <OrderConfirmation order={confirmation} />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -79,6 +96,9 @@ export default function MenuCart({ items }: MenuCartProps) {
         onDecrement={decrement}
         onRemove={remove}
       />
+      {entries.length > 0 && (
+        <CheckoutForm entries={entries} onSuccess={handleSuccess} />
+      )}
     </div>
   );
 }

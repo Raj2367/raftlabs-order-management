@@ -34,8 +34,11 @@
   with `{ "status": "ok" }`. (1 test, passing)
 - **`app/api/menu/route.test.ts`** — `GET /api/menu` returns the `menuItems`
   array from `lib/menu` and confirms the result is an array. (2 tests, passing)
-- Order API (`POST /api/orders`, `GET /api/orders/:id`) with an isolated test
-  database (mongodb-memory-server). — to be added in a later stage.
+- Order API (`POST /api/orders`): validates customer fields (name,
+  address, phone), items (non-empty, valid menuItemId, integer quantity >= 1),
+  rejects client-supplied price/name/subtotal/status, computes subtotal server-side,
+  returns 201 with normalized order or 400 with error message on failure;
+  malformed JSON returns 400 with `{"error":"Invalid JSON"}`. (8 tests, passing)
 - Status update API (`PATCH /api/orders/:id/status`) verifying forward-only
   enforcement. — to be added in a later stage.
 
@@ -48,8 +51,11 @@
   increments), increasing quantity (total items increments), decrementing to
   zero (item removed from cart), and two-item subtotal equals sum of line
   totals. (4 tests, passing)
-- Checkout form: client-side validation of name, address, and phone; prevents
-  submission when invalid. — to be added in a later stage.
+- **`components/CheckoutForm.test.tsx`** — empty fields prevent submission
+  and show `Required`; valid submission calls `fetch` once with the correct URL,
+  method, headers, and exact JSON body; API 400 shows error and preserves cart;
+  API 201 calls `onSuccess` with the returned order (ID and subtotal); network
+  rejection shows `Unable to place order`. (5 tests, passing)
 - Order tracking view: displays current status and polls for updates while
   active. — to be added in a later stage.
 
@@ -72,4 +78,4 @@
 
 ## Current Results
 
-- **26 passed, 0 failed, 0 skipped** across 7 test files.
+- **39 passed, 0 failed, 0 skipped** across 9 test files.
